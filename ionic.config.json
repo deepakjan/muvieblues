@@ -1,0 +1,8 @@
+{
+  "name": "muviebazar",
+  "app_id": "706d584e",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
