@@ -1,36 +1,30 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
-
-import { NavController } from 'ionic-angular';
-
-import { UserData } from '../../providers/user-data';
-
-import { UserOptions } from '../../interfaces/user-options';
-
-import { TabsPage } from '../tabs-page/tabs-page';
-import { SignupPage } from '../signup/signup';
-
-
+import { IonicPage, NavController } from 'ionic-angular';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+ 
+@IonicPage()
 @Component({
-  selector: 'page-user',
-  templateUrl: 'login.html'
+  selector: 'page-login',
+  templateUrl: 'login.html',
 })
 export class LoginPage {
-  login: UserOptions = { username: '', password: '' };
-  submitted = false;
-
-  constructor(public navCtrl: NavController, public userData: UserData) { }
-
-  onLogin(form: NgForm) {
-    this.submitted = true;
-
-    if (form.valid) {
-      this.userData.login(this.login.username);
-      this.navCtrl.push(TabsPage);
-    }
+ 
+  constructor(public navCtrl: NavController, private faio: FingerprintAIO) {
   }
-
-  onSignup() {
-    this.navCtrl.push(SignupPage);
+ 
+  login() {
+    this.faio.show({
+      clientId: 'Fingerprint-Demo',
+      clientSecret: 'password', // Only Android
+      localizedFallbackTitle: 'Use Pin', // Only iOS
+      localizedReason: 'Please authenticate' // Only iOS
+    })
+      .then((result: any) => {
+        //this.navCtrl.push(TabsPage);
+        this.navCtrl.setRoot('TabsPage');
+      })
+      .catch((error: any) => {
+        console.log('err: ', error);
+      });
   }
 }
